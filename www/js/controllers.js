@@ -1287,7 +1287,7 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
   var PatientsList,PatientsList1,PatientsList2,PatientsListOrigin;
   var PatientsBasic=new Array();//输出到页面的json 
   var refreshing=0;//控制连续刷新时序            
-  $scope.patients=PatientsBasic;
+  $scope.patients=PatientsList;
   $scope.moredata = true;  //控制上拉加载
 
     //-----------------------------------------------------------------------------//
@@ -1304,77 +1304,87 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
     showDelay: 0
   });
 
-  $scope.rankPatients=function(){
-    var rank;var propertyName;
-    rankList[0]=PatientsListOrigin;
-    switch($scope.rankBy){
-      case '计划进度':rank=1;propertyName='Process';break;
-      case '依从率':rank=2;propertyName='ComplianceRate';break;
-      default:rank=0;
-    }
-    if(rankPID[rank]==undefined){
-      var compare=function(propertyName) { 
-        return function (object1, object2) { 
-          var value1 = object1[propertyName]; 
-          var value2 = object2[propertyName]; 
-          if (value2 < value1) { 
-            return -1; 
-          } 
-          else if (value2 > value1) { 
-            return 1; 
-          } 
-          else { 
-            return 0; 
-          } 
-        } 
-      } 
-      rankList[rank]=PatientsListOrigin;
-      rankList[rank].sort(compare(propertyName));
-      var temp=new Array();
-      for(var i in rankList[rank]){
-        temp.push(rankList[rank][i].PatientId);
+  // $scope.rankPatients=function(){
+  //   var rank;var propertyName;
+  //   rankList[0]=PatientsListOrigin;
+  //   switch($scope.rankBy){
+  //     case '计划进度':rank=1;propertyName='Process';break;
+  //     case '依从率':rank=2;propertyName='ComplianceRate';break;
+  //     default:rank=0;
+  //   }
+  //   if(rankPID[rank]==undefined){
+  //     var compare=function(propertyName) { 
+  //       return function (object1, object2) { 
+  //         var value1 = object1[propertyName]; 
+  //         var value2 = object2[propertyName]; 
+  //         if (value2 < value1) { 
+  //           return -1; 
+  //         } 
+  //         else if (value2 > value1) { 
+  //           return 1; 
+  //         } 
+  //         else { 
+  //           return 0; 
+  //         } 
+  //       } 
+  //     } 
+  //     rankList[rank]=PatientsListOrigin;
+  //     rankList[rank].sort(compare(propertyName));
+  //     var temp=new Array();
+  //     for(var i in rankList[rank]){
+  //       temp.push(rankList[rank][i].PatientId);
         
-      }
-      rankPID[rank]=temp; 
-    }
-    PatientsBasic=[];loaditems=0;
-    PIDlist=rankPID[rank];
-    PatientsList=rankList[rank];
-    firstget();
-  }
+  //     }
+  //     rankPID[rank]=temp; 
+  //   }
+  //   PatientsBasic=[];loaditems=0;
+  //   PIDlist=rankPID[rank];
+  //   PatientsList=rankList[rank];
+  //   firstget();
+  // }
   var onePatientBasic= function(PID){
     userINFO.BasicInfo(PID).then(function(data){
       var str=JSON.stringify(data);
       var str=JSON.parse(str);
       //两个JSON拼数据,把PatientsList中的字段加到PatientsBasic
-      if(PatientsList[loaditems].photoAddress=='' || PatientsList[loaditems].photoAddress==null){    
-        str.photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/' +'non.jpg';
-      }else{
-        str.photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/'+ PatientsList[loaditems].photoAddress;
+      // if(PatientsList[loaditems].photoAddress=='' || PatientsList[loaditems].photoAddress==null){    
+      //   str.photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/' +'non.jpg';
+      // }else{
+      //   str.photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/'+ PatientsList[loaditems].photoAddress;
+      // }
+      // str.PlanNo = PatientsList[loaditems].PlanNo;
+      // str.StartDate = PatientsList[loaditems].StartDate;
+      // str.Process = PatientsList[loaditems].Process;
+      // str.RemainingDays = PatientsList[loaditems].RemainingDays;
+      // str.VitalSign = PatientsList[loaditems].VitalSign;
+      // str.ComplianceRate = PatientsList[loaditems].ComplianceRate;
+      // str.TotalDays = PatientsList[loaditems].TotalDays;
+      // str.Status = PatientsList[loaditems].Status;
+      // PatientsBasic.push(str);
+      // loaditems++;
+      for(var i in PatientsList){
+        if(PatientsList[i].PatientId == PID){
+          PatientsList[i].Age=str.Age;
+          PatientsList[i].GenderText=str.GenderText;
+        }
       }
-      str.PlanNo = PatientsList[loaditems].PlanNo;
-      str.StartDate = PatientsList[loaditems].StartDate;
-      str.Process = PatientsList[loaditems].Process;
-      str.RemainingDays = PatientsList[loaditems].RemainingDays;
-      str.VitalSign = PatientsList[loaditems].VitalSign;
-      str.ComplianceRate = PatientsList[loaditems].ComplianceRate;
-      str.TotalDays = PatientsList[loaditems].TotalDays;
-      str.Status = PatientsList[loaditems].Status;
-      PatientsBasic.push(str);
-      loaditems++;
+      $scope.patients=PatientsList.splice(0,loaditems);
+      console.log(loaditems);
+      console.log(PatientsList.splice(0,loaditems));
     },function(data){
     }); 
   }
   var getPatientsBasic=function(list){
     // for(var p in list){        //3行无延时请求数据
     //   onePatientBasic(list[p]);
-    // }  
+    // }
+    loaditems+=list.length
     var repeat=list.length;p=0;  
     var timer;
     timer = $interval(function(){
       if(repeat==0){
         $timeout(function(){$scope.moredata = false;},2000);
-        $scope.patients=PatientsBasic;
+        // $scope.patients=PatientsBasic;
         $interval.cancel(timer);
         timer=undefined;        
       }else{
@@ -1385,9 +1395,11 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
   }
   var firstget =function(){
       if(PIDlistLength>=10){
-      getPatientsBasic(PIDlist.slice(0,10));
+        getPatientsBasic(PIDlist.slice(0,10));
+        $scope.patients = PatientsList.splice(0,10);
       }else{
-      getPatientsBasic(PIDlist);
+        getPatientsBasic(PIDlist);
+        $scope.patients = PatientsList;
       }
       $ionicLoading.hide();
       $scope.$broadcast('scroll.refreshComplete'); //刷新完成，重新激活刷新
@@ -1400,13 +1412,19 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
   }
   var getPIDlist = function(){
     userINFO.GetPatientsList(DOCID,'HM1','0','0')
-    .then(function(data){
+    .then(function(data){      
+      console.log(data);
       var datastr=JSON.stringify(data);
       var datastr=JSON.parse(datastr);
       PatientsList1=datastr;
+      PatientsList1=data
       for(var i in PatientsList1){
+        PatientsList1[i].Module="高血压";
+        PatientsList1[i].Age="";
+        PatientsList1[i].GenderText="";        
         PIDlist.push(PatientsList1[i].PatientId);
       }
+      console.log(PatientsList1);
       
       userINFO.GetPatientsList(DOCID,'HM2','0','0')
       .then(function(data){
@@ -1414,11 +1432,15 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
         var datastr=JSON.parse(datastr);
         PatientsList2=datastr;
         for(var i in PatientsList2){
+          PatientsList2[i].Module="糖尿病";
+          PatientsList2[i].Age="";
+          PatientsList2[i].GenderText="";          
           PIDlist.push(PatientsList2[i].PatientId);
         }
+        console.log(PatientsList2);
         PIDlistLength=PIDlist.length;
         
-        rankPID[0]=PIDlist;
+        // rankPID[0]=PIDlist;
         if(PatientsList1!='' && PatientsList2!=''){
           var s1=JSON.stringify(PatientsList1);
           var s2=JSON.stringify(PatientsList2);
@@ -1434,7 +1456,16 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
             PatientsList=[];
           }
         }
-        PatientsListOrigin=PatientsList;
+        console.log(PatientsList);
+        for(var i in PatientsList){
+          if(PatientsList[i].photoAddress=='' || PatientsList[i].photoAddress==null){    
+            PatientsList[i].photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/' +'non.jpg';
+          }else{
+            PatientsList[i].photoAddress =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/'+ PatientsList[i].photoAddress;
+          }             
+        }
+
+        
         firstget();         
       },function(data){
         netError();
@@ -1447,7 +1478,7 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
   getPIDlist();
 
   $scope.PIDdetail = function(Patient){
-    Storage.set("PatientID",Patient.UserId);
+    Storage.set("PatientID",Patient.PatientId);
     Storage.set("isManage","Yes");
     Storage.set("PatientName",Patient.UserName);
     Storage.set('PatientAge',Patient.Age);
@@ -1475,8 +1506,8 @@ angular.module('appControllers', ['ionic','ionicApp.service', 'ngCordova','ja.qr
     }  
    $scope.$broadcast('scroll.infiniteScrollComplete');
   }  
-  $scope.setwidth=function(patient){
-    var divwidth=patient.Age + '%';
+  $scope.setwidth=function(Process){
+    var divwidth=Process + '%';
     return {width:divwidth}; 
   };
     //扫一扫，具体跳转再改
