@@ -1,4 +1,4 @@
-var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.directives', 'ngCordova','ionic-datepicker', 'appControllers'])
+﻿var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.directives', 'ngCordova','ionic-datepicker', 'appControllers'])
 
 .config(['$stateProvider','$urlRouterProvider','$ionicConfigProvider', function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
   $ionicConfigProvider.platform.android.tabs.position('bottom');
@@ -630,7 +630,7 @@ var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.d
 
 }])
 
-.run(function($state,$timeout,$cordovaSplashscreen,$ionicPlatform,Storage) {
+.run(function($state,$timeout,$cordovaSplashscreen,$ionicPlatform,$ionicPopup,Storage,PageFunc) {
   $ionicPlatform.ready(function(){
     var isSignIN=Storage.get("isSignIN");
     if(isSignIN=='YES'){
@@ -640,7 +640,7 @@ var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.d
   })
 
 
-  /*$ionicPlatform.ready(function() {
+  $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -651,7 +651,7 @@ var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.d
     }
     //启动极光推送服务
     document.addEventListener('jpush.openNotification', onOpenNotification, false); //监听打开推送消息事件
-    document.addEventListener('jpush.receiveNotification', onreceiveNotification, false); //监听接受推送消息事件
+    // document.addEventListener('jpush.receiveNotification', onreceiveNotification, false); //监听接受推送消息事件
     window.plugins.jPushPlugin.init();
     window.plugins.jPushPlugin.setDebugMode(true);
     //window.plugins.jPushPlugin.setAlias("SimonTDY");
@@ -696,12 +696,25 @@ var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.d
     if (title == "新申请")
     {
       Storage.set('PatientID', SenderID);
-      $state.go('');
+      $ionicPopup.show({
+        title: title,
+        template: alertContent, 
+        buttons: [{ 
+          text: '取消',
+          type: 'button-default',
+        }, {
+          text: '前往',
+          type: 'button-assertive',
+          onTap: function(e) {
+            $state.go('addappointment');
+          }
+        }]
+      });
+    }else{
+      PageFunc.confirm(alertContent,"系统消息")
     }
-    alert("open Notificaiton:"+alertContent);
-    //$state.go('coach.i');
   }  
-  */
+  
 })
 
 // --------不同平台的相关设置----------------

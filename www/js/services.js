@@ -1,4 +1,4 @@
-angular.module('ionicApp.service', ['ionic','ngResource','ngCordova'])
+﻿angular.module('ionicApp.service', ['ionic','ngResource','ngCordova'])
 
 //localStorage调用 XJZ
 .factory('Storage', ['$window', function ($window) { 
@@ -21,7 +21,7 @@ angular.module('ionicApp.service', ['ionic','ngResource','ngCordova'])
 .constant('CONFIG', {
  
   baseUrl: 'http://121.43.107.106:9000/Api/v1/',  //RESTful 服务器  121.43.107.106:9000
-  ImageAddressIP: "http://121.43.107.106:8088",
+  ImageAddressIP: "http://121.43.107.106:8089", // 20160928上传失败修改，端口号从8088改为8089
   ImageAddressFile : "/PersonalPhoto",
   ImageAddressFile_Check : "/PersonalPhotoCheck",  //lrz20151104
   wsServerIP : "ws://" + "121.43.107.106" + ":4141",
@@ -2097,7 +2097,7 @@ angular.module('ionicApp.service', ['ionic','ngResource','ngCordova'])
       "Doctor": DoctorId,
       "CategoryCode": "H"+Module,
       "ItemCode": "Patient",
-      "ItemSeq": 1,
+      "ItemSeq": -1,
       "Value": PatientId,
       "Description": "null",
       "SortNo": 1,
