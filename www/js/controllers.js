@@ -1253,7 +1253,7 @@
   //从字典中搜索选中的对象。
   var searchObj = function(code,array){
       for (var i = 0; i < array.length; i++) {
-        if(array[i].Type == code) return array[i];
+        if(array[i].Type == code || array[i].Name == code) return array[i];
       };
       return "未填写";
   }
@@ -6635,7 +6635,7 @@ $scope.$on('RisksGet',function(){
 
   $scope.slideHasChanged = function($index){
     var ii = $index;
-    console.log(ii);
+    //console.log(ii);
     // console.log($scope.item.M1show);
     // var status = 0;
     // if(M1show && M2Show && M3show) 
@@ -6818,7 +6818,7 @@ $scope.$on('RisksGet',function(){
 
         $scope.value.M1.SBP = t1 ==0 ? $scope.value.M1.SBP : t1;
         $scope.value.M1.DBP = t2 ==0 ? $scope.value.M1.DBP : t2;
-        console.log($scope.value.M1);
+        //console.log($scope.value.M1);
         
       });
     }
@@ -6836,7 +6836,7 @@ $scope.$on('RisksGet',function(){
       // if(promise.data = null)
         var t = ($scope.value.M3.NYHA == 1 || $scope.value.M3.NYHA == 2 || $scope.value.M3.NYHA == 3||$scope.value.M3.NYHA == 4) ? $scope.value.M3.NYHA: 1;
         $scope.value.M3 = promise;
-        console.log($scope.value.M3);
+        //console.log($scope.value.M3);
         $scope.$broadcast('loadingDone');
         $scope.value.M3.AA= $scope.value.M3.AA=='1' ? true:false;
         $scope.value.M3.Beta= $scope.value.M3.Beta=='1' ? true:false;
@@ -6848,7 +6848,7 @@ $scope.$on('RisksGet',function(){
        
         $scope.value.M3.NYHA = t;
         $scope.setedValue.selected = $scope.setedValue.NYHA[$scope.value.M3.NYHA -1].description;
-        console.log($scope.value.M3);
+        //console.log($scope.value.M3);
         
       });   
     }
@@ -6859,7 +6859,7 @@ $scope.$on('RisksGet',function(){
   $scope.clickSubmit = function(){
     //upload
     //加判断，如果有模块什么东西不全 那就不上传
-    console.log($scope.value);
+    //console.log($scope.value);
     var hasBlank = {M1:false,M2:false,M3:false};
     
     for(var item in $scope.value.M1){
