@@ -636,7 +636,14 @@
     if(isSignIN=='YES'){
       $state.go('coach.patients');
     }
-    $timeout(function(){$cordovaSplashscreen.hide()}, 1000);
+    $timeout(function(){
+      try{
+        $cordovaSplashscreen.hide();
+      }
+      catch(err){
+        console.info(err);
+      }
+    }, 1000);
   })
 
 
@@ -652,8 +659,14 @@
     //启动极光推送服务
     document.addEventListener('jpush.openNotification', onOpenNotification, false); //监听打开推送消息事件
     // document.addEventListener('jpush.receiveNotification', onreceiveNotification, false); //监听接受推送消息事件
-    window.plugins.jPushPlugin.init();
-    window.plugins.jPushPlugin.setDebugMode(true);
+    try{
+      window.plugins.jPushPlugin.init();
+      window.plugins.jPushPlugin.setDebugMode(true);
+    }catch(err){
+      console.info(err);
+    }
+    // window.plugins.jPushPlugin.init();
+    // window.plugins.jPushPlugin.setDebugMode(true);
     //window.plugins.jPushPlugin.setAlias("SimonTDY");
   });
 
