@@ -2,19 +2,11 @@
 	
 	<ion-nav-bar class="bar-positive nav-title-slide-ios7">
 		<ion-nav-back-button class="button-icon ion-arrow-left-c"></ion-nav-back-button>
-		    <ion-nav-buttons side="right">
-      <button class="button button-clear icon-right ion-arrow-up-a" ng-click="scrollTop()"></button>
-      <button class="button button-clear icon-right ion-arrow-down-a" ng-click="scrollBottom()"></button>
-    </ion-nav-buttons>
-	<!-- 	<a class="button button-clear icon-right ion-arrow-up-a" ng-click="scrollTop()">        
-        </a>
-        <a class="button button-clear icon-right ion-arrow-down-a" ng-click="scrollBottom()"></a> -->
 	</ion-nav-bar>
 
 	
 	<div class="bar-shadow"></div>
 	<ion-content scroll='true'>
-<!-- <progress  max="100" value="15"></progress> -->
 		<div class = "list item-list">
 			<div class="item item-divider ">
 			个人基本信息
@@ -75,7 +67,7 @@
 						家庭住址：<input type="text" ng-model="HomeAddress.Value">
 					</label>
 					<label class="item item-input">
-						联系电话：<input type="text" ng-model="PhoneNumber.Value">
+						联系电话：<input type="tel" ng-model="PhoneNumber.Value">
 					</label>		
 				<label class="item item-input">
 						国籍：<input type="text" ng-model="Nationality.Value">
@@ -87,7 +79,7 @@
 						紧急联系人：<input type="text" ng-model="EmergencyContact.Value">
 					</label>
 					<label class="item item-input">
-						紧急联系人电话：<input type="text" ng-model="EmergencyContactPhoneNumber.Value">
+						紧急联系人电话：<input type="tel" ng-model="EmergencyContactPhoneNumber.Value">
 					</label>
 	  			<p style="color:#FF0000">{{logStatus}}</p>
 	  			

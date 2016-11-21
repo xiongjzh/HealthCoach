@@ -2997,7 +2997,6 @@
       var temp={};
       for(var i=0;i<data.length;i++){  
         temp=data[i];
-        console.log(temp);
         if(temp.imageURL=='' || temp.imageURL==null){    
           temp.imageURL =CONFIG.ImageAddressIP+CONFIG.ImageAddressFile+'/' +'non.jpg';
         }else{
@@ -3420,13 +3419,9 @@
 .controller('ModuleInfoCtrl',['$scope','$state','$http', '$ionicHistory',  '$ionicLoading','$stateParams', '$timeout', 'Storage','GetBasicInfo', function($scope,$state,$http, $ionicHistory, $ionicLoading, $stateParams, $timeout, Storage,GetBasicInfo) {
   
   $scope.$on('$ionicView.enter', function() {
-  //   $http.get('partials/data1.json').success(function(data) {
-  //     $scope.ModuleInfo = data;
-  //   });
     $scope.Name=Storage.get('PatientName');
     $scope.age=Storage.get('PatientAge');
     $scope.gender=Storage.get('PatientGender');
-
   });
   //loading图标显示
   $ionicLoading.show({
@@ -3455,10 +3450,26 @@
       $ionicHistory.goBack();
   };
 
-
-  $http.get('partials/data1.json').success(function(data) {
-      $scope.ModuleInfo = data;
-  });
+  $scope.ModuleInfo=[
+    {
+      "ModuleCode":"M1",
+      "ModuleName":"高血压",
+      "Flag":true
+    },
+    {
+      "ModuleCode":"M2",
+      "ModuleName":"糖尿病",
+      "Flag":true
+    },
+    {
+      "ModuleCode":"M3",
+      "ModuleName":"心衰",
+      "Flag":true
+    }
+  ];
+  // $http.get('partials/data1.json').success(function(data) {
+  //     $scope.ModuleInfo = data;
+  // });
 
   if (Storage.get("isManage") == "Yes")
   {
@@ -4958,35 +4969,6 @@ $scope.loadingDone = false;
     loading();  
     Storage.rm('newPatientID');
     Storage.rm('phoneno');
-    // console.log($scope.PhoneNo.pn);
-    // if($scope.PhoneNo.pn.length!=11) {
-    //  $scope.logStatus='请输入11位手机号';
-    //  hide()
-    // }
-    // else{
-    //  var phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-    //  if(!phoneReg.test($scope.PhoneNo.pn)) $scope.logStatus='请输入正确的手机号';
-    //  else{Storage.set('phoneno',$scope.PhoneNo.pn);
-
-    //  var id='';
-    //  Users.UID('PhoneNo',$scope.PhoneNo.pn).then(
-    //    function(data){
-    //      id=data.result;
-    //      console.log(id);
-    //      if(id == null) {
-    //        $scope.logStatus='未注册的手机号';
-    //        hide()
-    //      }
-    //      else{
-    //        Storage.set('UID',id);
-    //        hide();
-    //        $state.go('new.basicinfo') 
-    //      }
-    //    },function(e){
-    //      console.log(e);
-    //    });
-    //    } 
-    // }
     var  phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
     if(!phoneReg.test($scope.PhoneNo.pn)) {
       $scope.logStatus='请输入正确的手机号';
@@ -4998,7 +4980,6 @@ $scope.loadingDone = false;
       Users.UID('PhoneNo',$scope.PhoneNo.pn).then(
         function(data){
           id=data.result;
-          console.log(id);
           if(id == null) {
             // $scope.logStatus='正在注册';
             // Dict.GetNo('17','{TargetDate}').then(
@@ -5028,23 +5009,8 @@ $scope.loadingDone = false;
 
 }])
 .controller('newbasicinfoCtrl',['$scope','$state','Storage','Users','Dict','$ionicPopup','$timeout','$ionicScrollDelegate','$ionicLoading','userservice','GetBasicInfo','BasicDtlInfo','PageFunc',function($scope,$state,Storage,Users,Dict,$ionicPopup,$timeout,$ionicScrollDelegate,$ionicLoading,userservice,GetBasicInfo,BasicDtlInfo,PageFunc){
-  $scope.scrollBottom = function() {
-      $ionicScrollDelegate.scrollBottom(true);
-    };
-  $scope.scrollTop = function() {
-      $ionicScrollDelegate.scrollTop(true);
-    };
-
   $scope.$on('$ionicView.beforeEnter', function() { 
-   
-
     $scope.PhoneNo=Storage.get('phoneno');
-    
-
-    // $scope.UserId,$scope.UserId,$scope.Birthday,$scope.Gender,$scope.BloodType,$scope.IDNo,$scope.DoctorId,$scope.InsuranceType
-    // $scope.Gender="";
-
-    // $scope.g=""
     $scope.users={
       "UserId": "",
       "UserName": "",
@@ -5061,12 +5027,6 @@ $scope.loadingDone = false;
       "piDeviceType": 13
       };
       
-
-      
-      
-
-      
-
     $scope.users.UserId=Storage.get('newPatientID');
     
 
@@ -5088,8 +5048,6 @@ $scope.loadingDone = false;
         });
     }
   });
-
-
 
   $scope.users={
     "UserId":Storage.get('newPatientID'),
@@ -5285,7 +5243,6 @@ $scope.loadingDone = false;
                     // $scope.InsuranceTypes=data.Name;
                     // console.log($scope.InsuranceTypes);
                     if($scope.InsuranceTypes!=""){
-                      console.log($scope.users.UserId);
                       if($scope.users.UserId!=null){
                       GetBasicInfo.GetBasicInfoByPid($scope.users.UserId).then(
                         function(data){
@@ -5315,7 +5272,7 @@ $scope.loadingDone = false;
 
                           $scope.users.IDNo=data.IDNo;
                           $scope.users.DoctorId= Storage.get('UID');
-                          $scope.users.InsuranceType=data.InsuranceType;
+                          $scope.users.InsuranceType=data.InsuranceTypeText;
                           console.log($scope.users);
                           
                           if(data!=""){
@@ -5384,15 +5341,24 @@ $scope.loadingDone = false;
     if(Storage.get('b')!=null)
 
   $scope.users.Birthday=Storage.get('b');
-// $scope.PhoneNumber.Value=Storage.get('phoneno');
-    // if(){
-      // if($scope.users.InsuranceType!='') $scope.users.InsuranceType = $scope.users.InsuranceType.Name;
-    
-      // if($scope.users.Gender!='') $scope.users.Gender = $scope.users.Gender.Name;
-      // if($scope.users.BloodType!='') $scope.users.BloodType = $scope.users.BloodType.Name;
-    // }
     loading();
-    
+    if(typeof($scope.users.IDNo) != 'string' || ($scope.users.IDNo.length!=15 && $scope.users.IDNo.length!=18)){
+      $scope.logStatus='请输入正确的身份证号';
+      hide();
+      return;
+    };  
+    var  phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+    var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
+    if($scope.PhoneNumber.Value && !(phoneReg.test($scope.PhoneNumber.Value) || isPhone.test($scope.PhoneNumber.Value))){
+      $scope.logStatus='请输入正确的联系电话';
+      hide();
+      return;
+    }
+    if($scope.EmergencyContactPhoneNumber.Value && !(phoneReg.test($scope.EmergencyContactPhoneNumber.Value) || isPhone.test($scope.EmergencyContactPhoneNumber.Value))){
+      $scope.logStatus='请输入正确的紧急联系人电话';
+      hide();
+      return;
+    }
     if($scope.users.Gender =='男性') $scope.users.Gender=1;
     if($scope.users.Gender =='女性') $scope.users.Gender=2;
     if($scope.users.Gender =='其他') $scope.users.Gender=3;
@@ -5407,23 +5373,6 @@ $scope.loadingDone = false;
     if($scope.users.BloodType == 'O型' || $scope.users.BloodType == '3') $scope.users.BloodType=3;
     if($scope.users.BloodType == 'AB型' || $scope.users.BloodType =='4') $scope.users.BloodType=4;
     if($scope.users.BloodType == '其他' || $scope.users.BloodType =='5') $scope.users.BloodType=5;
-    if($scope.users.IDNo.length!=15 && $scope.users.IDNo.length!=18 && $scope.users.IDNo!=''){
-      $scope.logStatus='请输入正确的身份证号';
-      hide();
-      return
-    };  
-    var  phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
-    var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
-      if(!phoneReg.test($scope.PhoneNumber.Value) && (!isPhone.test($scope.PhoneNumber.Value)) && $scope.PhoneNumber.Value!=''){
-        $scope.logStatus='请输入正确的联系电话';
-        hide();
-        return
-      }
-      if(!phoneReg.test($scope.EmergencyContactPhoneNumber.Value) && (!isPhone.test($scope.EmergencyContactPhoneNumber.Value)) && $scope.EmergencyContactPhoneNumber.Value!=''){
-        $scope.logStatus='请输入正确的紧急联系人电话';
-        hide();
-        return
-      }
     var a = function(){
       var alertS = $ionicPopup.alert({
         title: '已保存',
@@ -5450,101 +5399,35 @@ $scope.loadingDone = false;
       });
       
     };
-    
-
-  //  Users.BasicDtlInfo($scope.HomeAddress).then(
-  //    function(data){
-  //      console.log($scope.HomeAddress.Patient);
-  //      console.log($scope.HomeAddress.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
-
-    // Users.BasicDtlInfo($scope.PhoneNumber).then(
-  //    function(data){
-  //      console.log($scope.PhoneNumber.Patient);
-  //      console.log($scope.PhoneNumber.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
-
-    // Users.BasicDtlInfo($scope.Nationality).then(
-  //    function(data){
-  //      console.log($scope.Nationality.Patient);
-  //      console.log($scope.Nationality.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
-
-    // Users.BasicDtlInfo($scope.Occupation).then(
-  //    function(data){
-  //      console.log($scope.Occupation.Patient);
-  //      console.log($scope.Occupation.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
-
-    // Users.BasicDtlInfo($scope.EmergencyContact).then(
-  //    function(data){
-  //      console.log($scope.EmergencyContact.Patient);
-  //      console.log($scope.EmergencyContact.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
-
-    // Users.BasicDtlInfo($scope.EmergencyContactPhoneNumber).then(
-  //    function(data){
-  //      console.log($scope.EmergencyContactPhoneNumber.Patient);
-  //      console.log($scope.EmergencyContactPhoneNumber.Value);
-  //    },function(e){
-  //      console.log(e);
-  //    });
+  
     var p='';
-    // console.log($scope.users.UserId);
     if($scope.users.UserId!=null){
      
       userservice.Roles($scope.users.UserId).then(
         function(data){
-          // console.log(data);
           var l=data.length;
           
           for(var i=0;i<l;i++) {
             if (data[i]=='Patient'){
               p=1;
-              console.log(p);
             }
           };
           if(p==1){
             Users.PatientBasicInfo($scope.users).then(
               function(data){
-                console.log($scope.users.InsuranceType);
-                console.log($scope.users.Gender);
-                console.log($scope.users.BloodType);
-                console.log($scope.users.Birthday);
-                
                 if(data.result=='数据插入成功'){
                   Users.PatientBasicDtlInfo(detail).then(
                     function(data){
-                      
-                      
                       hide();
                       a();
                       Storage.set("PatientID",Storage.get("newPatientID"));
                       $state.go('addpatient.clinicinfo');
                     },function(e){
                       
-                      console.log(e);
                       netError();
-                      // hide();
-                      // a();
-                      // $state.go('addpatient.clinicinfo');
                     });
                   }
-                },function(e){
-                  console.log($scope.users);
-                  console.log($scope.users.Birthday);
-                  console.log(e);
-                
+                },function(e){               
                   hide();
                   b();
                 });
@@ -9309,11 +9192,9 @@ $scope.$on('RisksGet',function(){
 
   //首先获取pid
     var PatientID=Storage.get("PatientID");
-    console.log(PatientID);
   //根据pid获取海总最近一次就诊id
    GetHZID.GetHUserIdByHCode({UserId:PatientID,HospitalCode:'HJZYY'}).then(function(data){
       //拿到海总的就诊号用于后续同步
-      console.log(data.result);
       $scope.HJZYYID=data.result;
       // console.log($scope.HJZYYID);
     });
@@ -9323,8 +9204,6 @@ $scope.$on('RisksGet',function(){
   var promise2=GetClinicalList.GetClinicalInfoListbyUID({UserId:PatientID});
   promise2.then(function(data){
     $scope.cliniclist=data.DT_InPatientInfo;
-    console.log($scope.cliniclist.length);
-
   }, function(data) {
   });
    //点击查看详情根据UserId、Type、VisitId、Date获取具体检查信息modal形式展示
