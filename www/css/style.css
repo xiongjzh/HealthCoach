@@ -279,4 +279,11 @@ hr.list:after {
 .icon-gray{
   color:#AAAAAA;
 }
-
+.riskq-range .range span {
+  min-width:50px;
+  text-align:left;
+}
+.riskq-range .range span:nth-last-child(1) {
+  min-width:40px;
+  text-align:right;
+}
