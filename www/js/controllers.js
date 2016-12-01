@@ -1943,11 +1943,7 @@
   });
   var dataloading=function(){
     $ionicLoading.show({
-      // content: '加载中',
       animation: 'fade-in',
-      // showBackdrop: true,
-      // maxWidth: 200,
-      // showDelay: 0
     });
   }
   dataloading();
@@ -1979,7 +1975,7 @@
     filterStartDate='';
     filterStatus=[];
     filterComplianceRate=[];
-    orderConfig ="SMSCount desc,Status desc,RemainingDays,ComplianceRate,StartDate desc";
+    orderConfig ="SMSCount desc,Status desc,EndDate,ComplianceRate,StartDate desc";
     filterConfig = "PatientName ge  ''";
   }
   DOinitial();
@@ -6290,7 +6286,8 @@ $scope.$on('RisksGet',function(){
     $scope.create = {};
     $scope.create.EndDate;
     $scope.create.PlanList = new Array();
-    $scope.create.AddFlag = true; //只允许当前有一个正在执行的计划
+    $scope.create.AddFlag = false; //只允许当前有一个正在执行的计划
+    $scope.create.AddFlag1 = true;//避免页面上添加计划按钮一闪而过
     $scope.isloaded = false;
     //loading图标显示
     $ionicLoading.show({
@@ -6322,9 +6319,9 @@ $scope.$on('RisksGet',function(){
             {
                 if((data[i].Status =="3") || (data[i].Status =="4"))
                 {
-                    if(($scope.create.AddFlag) && (data[i].Status =="3"))
+                    if(($scope.create.AddFlag1) && (data[i].Status =="3"))
                     {
-                        $scope.create.AddFlag = false;
+                        $scope.create.AddFlag1 = false;
                     }
                     if (data[i].StartDate != "")
                     {
@@ -6352,6 +6349,7 @@ $scope.$on('RisksGet',function(){
                     $scope.create.PlanList.push(data[i]);
                 }
             }
+            $scope.create.AddFlag=$scope.create.AddFlag1;
             $ionicLoading.hide();
             $scope.isloaded = true;
         }, function(data) {
@@ -6359,8 +6357,11 @@ $scope.$on('RisksGet',function(){
     }
     $scope.SavePlanNo = function (PlanNo, PlanName)
     {
+        
         $rootScope.enableSave=PlanName=='当前计划'?true:false;
-        $rootScope.TempList = {}
+        //每次进入一个具体计划，作如下操作，清空TempList，修改后状态用TempList记录，只有右上角打勾按钮才真正上传修改。XJZ
+        $rootScope.TempList = {};
+        //子页面打勾
         $rootScope.TempList.flag={
           'TA':[],'TB':[],'TC':[],'TD':[],'TE':[],'TF':[],'TG':[],'TY':[],'TZ':[]
         };
@@ -6370,10 +6371,11 @@ $scope.$on('RisksGet',function(){
         $rootScope.TempList.DeleteList={
           'TA':[],'TB':[],'TC':[],'TD':[],'TE':[],'TF':[],'TG':[],'TY':[],'TZ':[]
         };
-        //控制打勾标识显示
+        //子页面第一次加载？控制是否需要用TempList修改页面
         $rootScope.firstLoad={
           'taskList':1,'TA':1,'TB':1,'TC':1,'TD':1,'TE':1,'TF':1,'TG':1,'TY':1,'TZ':1
         };
+        //控制打勾标识显示
         $rootScope.showCheckIcon={
           'TA':0,'TB':0,'TC':0,'TD':0,'TE':0,'TF':0,'TG':0,'TY':0,'TZ':0
         }
@@ -6401,7 +6403,6 @@ $scope.$on('RisksGet',function(){
         promise.then(function(data) {
             if(data.result == "数据插入成功")
             {
-                //$scope.create.PlanList.push({PlanName:"当前计划", PlanNo:PlanNo, StartDate:"", EndDate: ""});
                 $scope.create.AddFlag = false;
                 localStorage.setItem("CurrentPlanNo", PlanNo);
                 if (localStorage.getItem("isManage") == "Yes") //新计划插入成功，页面直接跳转到任务列表

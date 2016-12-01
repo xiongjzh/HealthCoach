@@ -5,54 +5,15 @@
     <div class="h1 title">主页</div>
     <button class="button button-icon icon ion-plus-round" ng-click="addpatient()"></button>
   </ion-header-bar>
-<!-- 
-  <ion-nav-bar class="bar-positive nav-title-slide-ios7">
-
-    <ion-nav-buttons side="left">
-      <button class="button button-icon icon ion-qr-scanner " ng-click="QRscan()">扫一扫</button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-      <button class="button button-icon icon ion-plus-round" ng-click="addpatient()">添加新患者</button>
-    </ion-nav-buttons>
-  </ion-nav-bar> -->
 <div class="bar-shadow"></div>
 <ion-content>
-
-<!--   <div class="list card" style="border:#BBBBBB 1px solid">
-    <div class="item item-avatar">
-      <img ng-src="{{imgURI}}">
-      <h3>{{ userInfo.BasicInfo.name }} </h3>
-      <h2>{{userInfo.DtInfo.unitname}}</h2>
-      <div class="badge badge-positive">{{userInfo.BasicInfo.id}}</div> 
-    </div>
-    <div class = "item item-divider">        
-    </div>     
-
-    <div class ="item item-icon-left">
-      <i class="icon ion-person"></i>
-      {{userInfo.DtInfo.jobTitle}}
-    </div>       
-    <div class ="item item-icon-left" >
-      <i class="icon ion-ios-pulse-strong"></i>
-      {{userInfo.DtInfo.dept}}
-    </div>     
-    <div class ="item item-icon-left">
-      <i class="icon ion-arrow-graph-up-left"></i>
-      {{userInfo.DtInfo.level}}
-    </div>
-  </div> -->
-
-
      <div class="list card" style="border:#BBBBBB 1px solid">
-
         <ion-item class="item-avatar">
-            <img src="{{imgURI}}">
-            <h2>{{ userInfo.BasicInfo.name }}</h2>
-           
+            <img ng-src="{{imgURI}}">
+            <h2>{{ userInfo.BasicInfo.name }}</h2>  
         </ion-item> 
      
         <div class="item item-body">
-          <!-- <p><i class="icon ion-thumbsup assertive"></i>负责模块：{{HealthCoachInfo.module}}</p> -->
           <p> <i class="icon ion-person positive"></i>  身份信息：{{userInfo.DtInfo.unitname}}  | {{userInfo.DtInfo.jobTitle}} | {{userInfo.DtInfo.dept}}({{userInfo.DtInfo.level}})</p>
           <p> <i class="icon ion-ios-pulse-strong positive"></i>  负责模块：{{HealthCoachInfo.module}}</p>
           <p> <i class="icon ion-thumbsup positive"></i>  总体评分：{{HealthCoachInfo.generalscore}}</p>
@@ -60,22 +21,19 @@
           <p><i class="icon ion-android-sunny positive"></i>活跃度：{{HealthCoachInfo.activityDegree}}</p>
           <p><i class="icon ion-android-favorite positive"></i>管理病人数量： {{HealthCoachInfo.PatientNum}}</p>
           <p><i class="icon ion-android-happy positive"></i>{{HealthCoachInfo.Description}}</p>
-       <!--  </div> -->
          
           <a class="item item-icon-left item-icon-right positive" href="#/commentList">
            <i class="icon ion-compose"></i>
             查看更多评论({{HealthCoachInfo.commentNum}})
             <i class="icon ion-ios-arrow-right"></i>
           </a>
-       <!--  </div> -->
 
         <ion-item class="item-avatar" ng-repeat="comment in CommentList " class="item-avatar">
-            <img src={{comment.imageURL}}>
+            <img ng-src={{comment.imageURL}}>
             <h5>{{comment.Name}} </h5>
             <p>{{comment.Score}}分 {{comment.CommentTime}}</p>
             <p>{{comment.Comment}}</p>
         </ion-item>
-        <!-- </div> -->
      
         <div class="item tabs tabs-secondary tabs-icon-left">
 
@@ -105,22 +63,8 @@
             <button class="button button-block  button-assertive" ng-click="onClickCheck()" ng-hide="state == '已激活'">
       进入审核页面 {{state}}
     </button>
-    
-<!--         <span class="button button-block  icon ion-information-circled" ng-click="onClickPersonalInfo()" >
-          个人信息
-        </span>
-
-        <span class="button button-block  icon ion-calendar" ng-click="onClickPersonalSchedule()">
-          专员日程
-        </span>
-        
-        <span class="button button-block  icon ion-gear-a" ng-click="onClickPersonalConfig()">
-          设置
-        </span> -->
-
     </div>
   </ion-list>
 
 </ion-content>
-
 </ion-view>
