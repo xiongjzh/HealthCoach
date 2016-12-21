@@ -414,7 +414,7 @@
     		})
     	return deferred.promise;
     }
-    serve.UpdateReservation = function(DocID,PID,status=3){
+    serve.UpdateReservation = function(DocID,PID,status){
       var deferred = $q.defer();
       Data.Users.UpdateReservation({"DoctorId":DocID,"PatientId":PID,"Status":status,"revUserId": "sample string 6","TerminalName": "sample string 7","TerminalIP": "sample string 8","DeviceType": 1},
         function(data,headers,status){
