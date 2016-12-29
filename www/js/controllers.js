@@ -8515,6 +8515,11 @@ $scope.$on('RisksGet',function(){
   //   $scope.SMSCount=0;
   // })
 }])
+.controller('supportCtrl',['$scope','$state','$ionicHistory','Storage',function($scope,$state,$ionicHistory,Storage){
+  $scope.historyBack = function(){
+    $ionicHistory.goBack();
+  }
+}])
 // 依从率图的控制器amcharts部分 ZXF 20151102
 .controller('planCtrl',function($scope, $state,$http,$ionicPopover,$ionicLoading,Storage,GetBasicInfo,GetPlanInfo,GetPlanchartInfo) {
   //根据手机屏幕高度调整chart高度

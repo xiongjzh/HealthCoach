@@ -292,6 +292,17 @@
     templateUrl: "partials/managepatient/main.html",
     controller:"mainCtrl"
   })
+  .state('support',{
+    url:"/docSupport",
+    // views:{
+      // "plan-tab":{
+        templateUrl:"partials/managepatient/DoctorSupport.html",
+        controller:"supportCtrl"  
+        // cache:false,
+      // }
+    // }
+    
+  })
    .state('manage.chat',{
       url:'/chat',
       views:{

@@ -1,11 +1,11 @@
 <ion-view  cache-view="false" title="计划列表">
 	<ion-nav-bar class="bar-positive">
-		<ion-nav-buttons side="primary">
+		<ion-nav-buttons side="left">
 			<button class="button icon button-icon ion-android-home" ng-click="onClickBackward()"></button>
 		</ion-nav-buttons>
-		<ion-nav-buttons side="secondary">
-			<button class="button icon button-icon ion-checkmark-round" ng-click="backtomain()" ng-if="isloaded"></button>
-		</ion-nav-buttons>
+		<ion-nav-buttons side="right">
+        <a class="button icon button-icon ion-help-circled" href="#/docSupport"></a>
+    </ion-nav-buttons>
 	</ion-nav-bar>
 	<ion-content has-bouncing="false">
 		<div class="top-of-the-content">{{Name}}  {{gender}}  {{age}}</div>	
@@ -23,4 +23,4 @@
 	        </button>
         </div>     	
     </ion-content>	
-</ionic view>
+</ion-view>
