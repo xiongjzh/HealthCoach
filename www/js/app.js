@@ -604,7 +604,7 @@
           }
         })
     }
-    if (title == "新申请")
+    if (title.indexOf("预约") != -1)
     {
       Storage.set('PatientID', SenderID);
       $ionicPopup.show({

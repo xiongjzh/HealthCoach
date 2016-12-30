@@ -9,6 +9,11 @@
 	</ion-nav-bar>
 	<ion-content has-bouncing="false">
 		<div class="top-of-the-content">{{Name}}  {{gender}}  {{age}}</div>	
+		<div style="text-align:center;padding:20px;">
+	        <button class="button button-outline button-positive" style="width:300px;height:30px;" ng-click="CreatePlan()" ng-if="create.AddFlag" >
+	        	<span style="font-size:15px;color:blue;font-weight:bold">添加计划</span>
+	        </button>
+        </div> 
 		<div class="list">
 			<div class="item" ng-repeat = "item in create.PlanList" style="background-color:#FBFCFF;color:{{item.Status}}">
 				<a class="item item-icon-right" href="#/manage/taskList" ng-click="SavePlanNo(item.PlanNo,item.PlanName)">    
@@ -16,11 +21,6 @@
 					<i class="icon ion-chevron-right"></i>
 		        </a> 
 	        </div>          	                          
-    	</div>
-    	<div style="text-align:center;padding:20px;">
-	        <button class="button button-outline button-positive" style="width:100px;height:30px;" ng-click="CreatePlan()" ng-if="create.AddFlag" >
-	        	<span style="font-size:15px;color:blue;font-weight:bold">添加计划</span>
-	        </button>
-        </div>     	
+    	</div>    	
     </ion-content>	
 </ion-view>
