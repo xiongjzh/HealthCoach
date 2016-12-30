@@ -2809,6 +2809,7 @@
     return function(){
       var docID=Storage.get('UID');
       var isMyPID=0;
+      var newpid;
       var setData =function(thisPatient){
         userservice.UpdateReservation(docID,newpid,3);//从预约列表删除
         Storage.set("PatientID",thisPatient.PatientId);
@@ -2836,7 +2837,7 @@
         // "Cancelled: " + data.cancelled;
         if(data.cancelled!=true){
           $ionicLoading.show({ template: '正在查询'});
-          var newpid=data.text
+          newpid=data.text
           var tempf="PatientId eq '"+newpid+"'";
           userINFO.GetPatientsList(1000,0,'PatientName',tempf,docID,'HM1','0','0')
           .then(function(data){

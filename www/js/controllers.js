@@ -3821,15 +3821,15 @@
           console.log(e);
       });
   });
-    // Users.PhoneNo(Storage.get('UID')).then(
-    //   function(data){
-    //     var s="";
-    //     for(var i=0;i<11;i++){
-    //       s=s+data[i];
-    //     };
-    //     $scope.phoneno_coach=s;
-    //     },function(e){
-    //   });
+    Users.PhoneNo(Storage.get('UID')).then(
+      function(data){
+        var s="";
+        for(var i=0;i<11;i++){
+          s=s+data[i];
+        };
+        $scope.phoneno_coach=s;
+        },function(e){
+      });
  $scope.loadingDone = false;
   ScheduleService.initialize();
   $scope.data = {calendar : [],selectedDate: undefined, selectedTime:undefined};
@@ -4027,7 +4027,8 @@
           "title":"预约",
           "id":Storage.get('UID')
         }
-        $scope.content = $scope.healthcoach.name+','+$scope.healthcoach.date+''+$scope.healthcoach.time+','+$scope.healthcoach.Unit;
+        $scope.content = $scope.healthcoach.name+','+$scope.healthcoach.date+' '+$scope.healthcoach.time+','+$scope.healthcoach.Unit;
+        $scope.contentCoach = $scope.patient.name+','+$scope.healthcoach.date+' '+$scope.healthcoach.time+','+$scope.healthcoach.Unit;
         // 调试写死
         // $scope.sendSMS={
         //   "mobile":"18626860001",
@@ -4038,24 +4039,24 @@
           "mobile":$scope.phoneno_patient,
           "smsType":"confirmtoPatient",
           "content":$scope.content
-        }
-        // $scope.coachsendSMS={
-        //   "mobile":$scope.phoneno_coach,
-        //   "smsType":"confirmtoHealthCoach",
-        //   "content":
-        // }
-        // userservice.PushNotification($scope.Push).then(
-        //   function(data){
-        //     },function(e){
-        //   });
-        // userservice.sendSMS_lzn($scope.patientsendSMS).then(
-        //   function(data){
-        //     },function(e){
-        //   });
-        // userservice.sendSMS_lzn($scope.coachsendSMS).then(
-        //   function(data){
-        //     },function(e){
-        //   });
+        };
+        $scope.coachsendSMS={
+          "mobile":$scope.phoneno_coach,
+          "smsType":"confirmtoHealthCoach",
+          "content":$scope.contentCoach
+        };
+        userservice.PushNotification($scope.Push).then(
+          function(data){
+            },function(e){
+          });
+        userservice.sendSMS_lzn($scope.patientsendSMS).then(
+          function(data){
+            },function(e){
+          });
+        userservice.sendSMS_lzn($scope.coachsendSMS).then(
+          function(data){
+            },function(e){
+          });
         Users.ReserveHealthCoach($scope.reservation).then(
           function(data){
             if(data.result=="数据插入成功"){
@@ -4492,9 +4493,9 @@ $scope.loadingDone = false;
 }])
 .controller('newbasicinfoCtrl',['$scope','$state','Storage','Users','Dict','$ionicPopup','$timeout','$ionicScrollDelegate','$ionicLoading','userservice','GetBasicInfo','BasicDtlInfo','PageFunc',function($scope,$state,Storage,Users,Dict,$ionicPopup,$timeout,$ionicScrollDelegate,$ionicLoading,userservice,GetBasicInfo,BasicDtlInfo,PageFunc){
   $scope.$on('$ionicView.beforeEnter', function() {
-    //$scope.PhoneNo=Storage.get('phoneno');
+    $scope.PhoneNo=Storage.get('phoneno');
     $scope.users={
-      "UserId": "",
+      "UserId": Storage.get('newPatientID'),
       "UserName": "",
       "Birthday": "",
       "Gender": "",
@@ -4508,15 +4509,15 @@ $scope.loadingDone = false;
       "piTerminalIP": "sample string 12",
       "piDeviceType": 13
       };
-    $scope.users.UserId=Storage.get('newPatientID');
-    Users.PhoneNo($scope.users.UserId)
-    .then(function(data){
-      data=data.toJSON();
-      var p='';
-      for(var i in data)
-        p+=data[i];
-      $scope.PhoneNo=p;
-    });
+    // $scope.users.UserId=Storage.get('newPatientID');
+    // Users.PhoneNo($scope.users.UserId)
+    // .then(function(data){
+    //   data=data.toJSON();
+    //   var p='';
+    //   for(var i in data)
+    //     p+=data[i];
+    //   $scope.PhoneNo=p;
+    // });
     // var  phoneReg=/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
     // if($scope.users.UserId!=null && !phoneReg.test($scope.PhoneNo)){
     //   Users.PhoneNo($scope.users.UserId).then(
@@ -4699,10 +4700,11 @@ $scope.loadingDone = false;
                 Dict.GetInsuranceType().then(
                   function(data){
                     $scope.InsuranceTypes=[];
+                    $scope.InsuranceTypesCode=[];
                     for(var i=0;i<data.length;i++){
-                      $scope.InsuranceTypes[i]=data[i].Name;
+                      $scope.InsuranceTypes.push(data[i].Name);
+                      $scope.InsuranceTypesCode.push(data[i].Code);
                     };
-                    // $scope.InsuranceTypes=data.Name;
                     if($scope.InsuranceTypes!=""){
                       if($scope.users.UserId!=null){
                       GetBasicInfo.GetBasicInfoByPid($scope.users.UserId).then(
@@ -4783,7 +4785,7 @@ $scope.loadingDone = false;
   $scope.save = function(){
     var detail = [$scope.HomeAddress,$scope.PhoneNumber,$scope.Nationality,$scope.Occupation,$scope.EmergencyContact,$scope.EmergencyContactPhoneNumber];
     if(Storage.get('b')!=null)
-  $scope.users.Birthday=Storage.get('b');
+    $scope.users.Birthday=Storage.get('b');
     loading();
     if(typeof($scope.users.IDNo) != 'string' || ($scope.users.IDNo.length!=15 && $scope.users.IDNo.length!=18)){
       $scope.logStatus='请输入正确的身份证号';
@@ -4814,6 +4816,9 @@ $scope.loadingDone = false;
     if($scope.users.BloodType == 'O型' || $scope.users.BloodType == '3') $scope.users.BloodType=3;
     if($scope.users.BloodType == 'AB型' || $scope.users.BloodType =='4') $scope.users.BloodType=4;
     if($scope.users.BloodType == '其他' || $scope.users.BloodType =='5') $scope.users.BloodType=5;
+    for(var i in $scope.InsuranceTypes){
+      if($scope.InsuranceTypes[i]==$scope.users.InsuranceType) $scope.users.InsuranceType=$scope.InsuranceTypesCode[i];
+    }
     var a = function(){
       var alertS = $ionicPopup.alert({
         title: '已保存',
@@ -6384,6 +6389,25 @@ $scope.$on('RisksGet',function(){
     //创建新计划
     $scope.CreatePlan = function ()
     {
+        $rootScope.TempList = {};
+        //子页面打勾
+        $rootScope.TempList.flag={
+          'TA':[],'TB':[],'TC':[],'TD':[],'TE':[],'TF':[],'TG':[],'TY':[],'TZ':[]
+        };
+        $rootScope.TempList.AddList={
+          'TA':[],'TB':[],'TC':[],'TD':[],'TE':[],'TF':[],'TG':[],'TY':[],'TZ':[]
+        };
+        $rootScope.TempList.DeleteList={
+          'TA':[],'TB':[],'TC':[],'TD':[],'TE':[],'TF':[],'TG':[],'TY':[],'TZ':[]
+        };
+        //子页面第一次加载？控制是否需要用TempList修改页面
+        $rootScope.firstLoad={
+          'taskList':1,'TA':1,'TB':1,'TC':1,'TD':1,'TE':1,'TF':1,'TG':1,'TY':1,'TZ':1
+        };
+        //控制打勾标识显示
+        $rootScope.showCheckIcon={
+          'TA':0,'TB':0,'TC':0,'TD':0,'TE':0,'TF':0,'TG':0,'TY':0,'TZ':0
+        }
         var DateNow = TimeFormat(new Date())[1];
         var promise = Dict.GetNo(15, DateNow);
         promise.then(function(data) {
@@ -9214,7 +9238,7 @@ $scope.$on('RisksGet',function(){
       $scope.gender=Storage.get('PatientGender');
              });
       $scope.backtocoach=function(){
-        $state.go('coach.home');
+        $state.go('coach.patients');
       }
      var PatintId=Storage.get('PatientID');
      var setstate;
