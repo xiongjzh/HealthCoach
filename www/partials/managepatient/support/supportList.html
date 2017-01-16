@@ -1,0 +1,20 @@
+  
+<ion-view hide-tabs title="{{'咨询记录-'+ PID}}">
+<ion-nav-bar  class="bar-positive">
+  <ion-nav-buttons side="left">
+    <button class="button icon button-icon ion-android-arrow-back" ng-click="historyBack()"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <buttton class="button" ng-click="newSupport()">新建问题</buttton>
+  </ion-nav-buttons>
+</ion-nav-bar>
+  <ion-content start-y="300" style="background-color:#F5F5F5">
+    <div collection-repeat="consultation in consultations" class="item" ng-click="showDetail(consultation)">
+          <h><span style="color:#417D9A">[主题]</span>{{consultation.Title}}consultation.Title</h>
+          <!-- <p style="margin-top:8px">{{message.Description}}</p> -->
+          <p>医生：{{consultation.DoctorName}}</p>
+          <div style="float:right;width:5em;font-size:0.7em;font-style:italic;text-align:right">{{consultation.ApplicationTime | datetext}}</div>
+          <div class="mytest" style="width:auto;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">{{consultation.Status | supportstatus}} <span ng-if="consultation.Status>3">{{consultation.Solution}}</span></div>
+        </div>
+  </ion-content>     
+</ion-view>

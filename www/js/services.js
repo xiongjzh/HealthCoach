@@ -73,6 +73,8 @@
       Activition:{method:'POST',params:{route:'Activition'},timeout:10000},//用户注册后激活
       BasicInfo:{method:'GET',params:{route:'@route'},timeout:10000},
       ChangePassword:{method:'POST',params:{route:'ChangePassword'},timeout: 10000},
+      Consultation:{method:'POST',params:{route:'Consultation'},timeout: 10000},
+      doctorList:{method:'GET',params:{route:'doctorList'},timeout:10000},
       GetAppoitmentPatientList:{method:'GET',params:{route:'GetAppoitmentPatientList',$top:'@top',$skip:'@skip',$orderby:'@orderby',$filter:'@filter', healthCoachID:'@healthCoachID',Status:'@Status'},timeout:10000,isArray:true},
       GetCalendar:{method:'GET',isArray:true,params:{route:'Calendar',DoctorId:'@DoctorId'},timeout: 10000},
       GetCommentList: {method:'GET',isArray: true,params:{route: 'GetCommentList'}, timeout:100000},
@@ -81,6 +83,7 @@
       getiHealthCoachList:{method:'GET',params:{route:'HealthCoaches',PatientId:'@PatientId'},timeout:10000,isArray:true},
       GetPatientsList:{method:'GET',params:{route:'GetPatientsPlan',$top:'@top',$skip:'@skip',$orderby:'@orderby',$filter:'@filter', DoctorId:'@DoctorId',Module:'@ModuleType',VitalType:'@VitalType',VitalCode:'@VitalCode'},timeout:10000,isArray:true},
       getUID:{method:'GET',params:{route:'UID', Type: '@Type', Name: '@Name'}, timeout:10000},
+      HModulesByID:{method:'GET',params:{route:'HModulesByID'}, timeout:10000,isArray:true},
       LogOn:{method:'POST',headers:{token:getToken()}, params:{route: 'LogOn'}, timeout: 10000},
       PatientBasicDtlInfo:{method:'POST',params:{route:'BasicDtlInfo'},timeout:10000},
       PatientBasicInfo:{method:'POST',params:{route:'BasicInfo'},timeout:10000},
@@ -444,6 +447,41 @@
     serve.GetPatientsList = function(top,skip,orderby,filter,_DoctorId,_Module,_VitalType,_VitalCode){
         var deferred = $q.defer();
         Data.Users.GetPatientsList({$top:top,$skip:skip,$orderby:orderby,$filter:filter,DoctorId:_DoctorId,Module:_Module,VitalType:_VitalType,VitalCode:_VitalCode},
+        function(data){
+            deferred.resolve(data);
+        },
+        function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+    serve.HModulesByID = function(obj){
+        var deferred = $q.defer();
+        Data.Users.HModulesByID(obj,
+        function(data){
+            var modules={};
+            for(var i=0;i<data.length;++i) modules[data[i].Modules]=data[i].CategoryCode;
+            deferred.resolve(modules);
+        },
+        function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+    serve.Consultation = function(obj){
+        var deferred = $q.defer();
+        Data.Users.Consultation(obj,
+        function(data){
+            deferred.resolve(data);
+        },
+        function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+    serve.doctorList = function(obj){
+        var deferred = $q.defer();
+        Data.Users.doctorList(obj,
         function(data){
             deferred.resolve(data);
         },

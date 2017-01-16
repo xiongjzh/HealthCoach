@@ -24,7 +24,7 @@
       <hr class="list" />
     </div>
     <ion-list> 
-      <div  collection-repeat="patient in patients |filter:byRange()|filter: query" collection-item-height="94px"  ng-click="PIDdetail(patient)" >
+      <div collection-repeat="patient in patients |filter:byRange()|filter: query" collection-item-height="94px"  ng-click="PIDdetail(patient)" >
       <ion-item class="item-avatar-left2 item-margin " style="height:88px">
         <img ng-src="{{patient.photoAddress}}">
         <div class="row" style=" padding-left:65px;padding-bottom:0">

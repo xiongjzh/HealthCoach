@@ -1,0 +1,60 @@
+<ion-view view-title="求助医生">   
+  <ion-nav-bar  class="bar-positive">
+    <ion-nav-buttons side="left">
+      <button class="button icon button-icon ion-android-arrow-back" ng-click="historyBack()"></button>
+    </ion-nav-buttons>
+    <!-- <ion-nav-buttons side="right">
+      <button class="button icon button-icon ion-help-circled" href="#/docSupport"></button>
+    </ion-nav-buttons> -->
+  </ion-nav-bar>
+    <ion-content class="padding" >
+        <form>
+            <ion-list class="list-inset">
+                <div class="item item-divider">{{patient.UserName}}<span style="padding-left:12%"></span>{{patient.GenderText}}<span style="padding-left:10px"></span>{{patient.Age}}</div>
+                <label class="item item-input-right item-select">
+                    <div class="input-label">
+                        选择模块
+                    </div>
+                    <select ng-options="key for (key , value) in modules" ng-model="consultation.Module">
+                        <!-- <option value="module.code">请选择</option> -->
+                    </select>
+                </label>
+                <label class="item item-input-right item-select">
+                    <div class="input-label">
+                        选择医生
+                    </div>
+                    <select ng-options="key  for (key , value) in doctors" ng-model="consultation.DoctorId" >
+                        <!-- <option value="">请选择</option> -->
+                    </select>
+                </label>
+                <label class="item item-input-right item-select">
+                    <div class="input-label">
+                        紧急程度
+                    </div>
+                    <select ng-options="key for (key , value) in levels" ng-model="consultation.Emergency">
+                        <!-- <option value="">请选择</option> -->
+                    </select>
+                </label>
+
+            </ion-list>
+            <!-- <p>{{patient.UserName+"     "}} {{patient.GenderText+"   "}} {{patient.Age}}岁 </p> -->
+            <!-- <p>选择模块：</p> -->
+            <hr style="border: 0;border-top:1px solid #bbb"/>
+            <div class="list list-inset">
+              <label class="item item-input">
+                <!-- <i class="icon ion-search placeholder-icon"></i> -->
+                <input type="text" placeholder="主题" ng-model="consultation.Title">
+              </label>
+            </div>
+            <div class="list list-inset">
+              <label class="item item-input">
+                <!-- <i class="icon ion-search placeholder-icon"></i> -->
+                <textarea rows="8" type="text" style="resize:none" ng-model="consultation.Description" placeholder="正文"></textarea>
+              </label>
+            </div> 
+            <button class="button button-block button-stable" type="submit" ng-click ="submit()">
+                提交
+            </button>
+        </form>
+    </ion-content>     
+</ion-view>

@@ -1,4 +1,4 @@
-﻿var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.directives', 'ngCordova','ionic-datepicker', 'appControllers'])
+﻿var ionicApp=angular.module('ionicApp', ['ionic','ionicApp.service', 'ionicApp.directives','starter.filters', 'ngCordova','ionic-datepicker', 'appControllers'])
 .config(['$stateProvider','$urlRouterProvider','$ionicConfigProvider', function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
   $ionicConfigProvider.platform.android.tabs.position('bottom');
   $ionicConfigProvider.platform.android.navBar.alignTitle('center');
@@ -121,8 +121,20 @@
     url:'/messages/:messageType',
     views:{
       'coach-message':{
-        templateUrl:'partials/individual/detail-message.html',
-        controller:'CoachMessageDetailCtrl'
+        templateUrl:function ($stateParams){
+          if($stateParams.messageType=='supports')
+            return 'partials/managepatient/support/supportListAll.html';
+          else
+            return 'partials/individual/detail-message.html';
+        },
+        // templateUrl:'partials/individual/detail-message.html',
+        controllerProvider:function ($stateParams){
+          if($stateParams.messageType=='supports')
+            return 'CoachMessageSupportCtrl';
+          else
+            return 'CoachMessageDetailCtrl';
+        }
+        // controller:'CoachMessageDetailCtrl'
       }
     }
   })
@@ -284,7 +296,25 @@
     }
   })
    //患者管理
- $stateProvider
+  $stateProvider
+  .state('supportList',{
+    url:"/supportList/:PID",
+    templateUrl:"partials/managepatient/support/supportList.html",
+    controller:'supportListCtrl'
+  })
+  .state('newsupport',{
+    url:"/newsupport",
+    // views:{
+      // "plan-tab":{
+        cache:false,
+        templateUrl:"partials/managepatient/support/DoctorSupport.html",
+        controller:"newSupportCtrl"  
+        // cache:false,
+      // }
+    // }
+    
+  })
+  
   $stateProvider
    .state('manage', {
     url: "/manage",
@@ -292,17 +322,7 @@
     templateUrl: "partials/managepatient/main.html",
     controller:"mainCtrl"
   })
-  .state('support',{
-    url:"/docSupport",
-    // views:{
-      // "plan-tab":{
-        templateUrl:"partials/managepatient/DoctorSupport.html",
-        controller:"supportCtrl"  
-        // cache:false,
-      // }
-    // }
-    
-  })
+  
    .state('manage.chat',{
       url:'/chat',
       views:{

@@ -1529,7 +1529,6 @@
   $scope.tempDate = new Date();
   $scope.datesOptions = [];
   $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -1630,7 +1629,6 @@
   $scope.onClickRefresh =function(){
     ScheduleService.initialize();
       $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -1816,6 +1814,11 @@
 }])
 .controller('CoachMessageCtrl',['$state','$scope','$filter','MessageInfo','Storage', function($state,$scope,$filter,MessageInfo,Storage){
   $scope.$on('$ionicView.enter', function() {
+    $scope.consultation={
+      Title:'abdce',
+      Description:'nothing',
+      ApplicationTime:'2016 12/12 12:12:12'
+    }
     MessageInfo.GetDataByStatus(Storage.get('UID'),1,'{Status}',1,0)
     .then(function(data){
       $scope.systemMessage=data[0];
@@ -1855,10 +1858,10 @@
         str2=arr2.join();
         return str1.localeCompare(str2);
       }
-	if(temp[0]!=undefined)
-      $scope.patientsMessages=temp;
-	else
-	$scope.patientsMessages='';
+    	if(temp[0]!=undefined)
+        $scope.patientsMessages=temp;
+    	else
+    	  $scope.patientsMessages='';
       temp=[];
     })
   });
@@ -1888,10 +1891,58 @@
       })
     }else if($stateparams.messageType=='appointment'){
       $scope.headerText = '预约消息';
-    }else{
-      $scope.headerText = '直接跳转聊天界面chatdetail？';
     }
   });
+}])
+.controller('CoachMessageSupportCtrl',['$state','$scope','$ionicModal','Storage',function($state,$scope,$ionicModal,Storage){
+  $scope.consultations=[
+    {"SortNo":2,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"4353","Emergency":1,"Status":1},
+    {"SortNo":1,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"534","Emergency":1,"Status":1}
+  ]
+  $ionicModal.fromTemplateUrl('partials/managepatient/support/detailModal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.moreOfThisPatient  = function(){
+    $scope.modal.hide()
+    // Storage.set("PatientID",$scope.consultation.PatientId);
+    // Storage.set("isManage","Yes");
+    // Storage.set("PatientName",$scope.consultation.PatientName);
+    // Storage.set('PatientAge',$scope.consultation.Age);
+    // Storage.set('PatientGender',$scope.consultation.GenderText);
+    // Storage.set("PatientPhotoAddress",$scope.consultation.photoAddress);
+    // $state.go('supportList')
+  }
+  $scope.showDetail = function(consultation){
+    $scope.modal.show();
+    $scope.consultation=consultation;
+  }
+}])
+.controller('supportListCtrl',['$state','$stateParams','$ionicHistory','$scope','$ionicModal','Storage',function($state,$stateParams,$ionicHistory,$scope,$ionicModal,Storage){
+  $scope.PID=$stateParams.PID;
+  $scope.consultations=[
+    {"SortNo":2,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"的方式公司的风格","Emergency":1,"Status":1},
+    {"SortNo":1,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"给大家东方国际","Emergency":1,"Status":1}
+  ]
+  $ionicModal.fromTemplateUrl('partials/managepatient/support/detailModal2.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.historyBack = function(){
+    console.log($ionicHistory);
+    $ionicHistory.goBack();
+  }
+  $scope.showDetail = function(consultation){
+    $scope.modal.show();
+    $scope.consultation=consultation;
+  }
+  $scope.newSupport = function(){
+    $state.go('newsupport');
+  }
 }])
 .controller('myPatientCtrl', ['$rootScope', '$ionicScrollDelegate', '$ionicPopover','$filter','$ionicModal', '$ionicPopup','$ionicLoading','$scope', '$state','$timeout','$interval','$ionicHistory','Storage' ,'userINFO','PageFunc','CONFIG','QRScan' ,function($rootScope,$ionicScrollDelegate,$ionicPopover,$filter,$ionicModal, $ionicPopup,$ionicLoading,$scope, $state,$timeout,$interval,$ionicHistory,Storage,userINFO,PageFunc,CONFIG,QRScan){
   var PIDlist=new Array();//PID列表
@@ -2607,7 +2658,6 @@
   $scope.moredata = false;
   var dataloading= function(){
     $ionicLoading.show({
-      content: '加载中',
       // animation: 'fade-in',
       // showBackdrop: true,
       // maxWidth: 200,
@@ -3088,9 +3138,9 @@
     $scope.age=Storage.get('PatientAge');
     $scope.gender=Storage.get('PatientGender');
   });
+  $scope.PID=Storage.get('PatientID');
   //loading图标显示
   $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -3206,7 +3256,6 @@
   $scope.isloaded = false;
   //loading图标显示
   $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -3838,7 +3887,6 @@
   $scope.tempDate = new Date();
   $scope.datesOptions = [];
   $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -4196,7 +4244,6 @@ $scope.loadingDone = false;
   $scope.tempDate = new Date();
   $scope.datesOptions = [];
   $ionicLoading.show({
-    content: '加载中',
     animation: 'fade-in',
     showBackdrop: true,
     maxWidth: 200,
@@ -6296,7 +6343,6 @@ $scope.$on('RisksGet',function(){
     $scope.isloaded = false;
     //loading图标显示
     $ionicLoading.show({
-        content: '加载中',
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
@@ -6306,6 +6352,7 @@ $scope.$on('RisksGet',function(){
         GetPlanList();
     });
     $scope.$on('$ionicView.enter', function() {   //$viewContentLoaded
+        $scope.PID=Storage.get('PatientID');
         $scope.Name=Storage.get('PatientName');
         $scope.age=Storage.get('PatientAge');
         $scope.gender=Storage.get('PatientGender');
@@ -6497,7 +6544,6 @@ $scope.$on('RisksGet',function(){
     // if(!$rootScope.TempList.DeleteList) $rootScope.TempList.DeleteList = new Array();
     //loading图标显示
     $ionicLoading.show({
-        content: '加载中',
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
@@ -6856,7 +6902,6 @@ $scope.$on('RisksGet',function(){
     $scope.isloaded = false;
     //loading图标显示
     $ionicLoading.show({
-        content: '加载中',
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
@@ -7406,7 +7451,6 @@ $scope.$on('RisksGet',function(){
     //if(!$rootScope.TempList.DeleteList) $rootScope.TempList.DeleteList = new Array();
     //loading图标显示
     $ionicLoading.show({
-        content: '加载中',
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
@@ -7882,7 +7926,6 @@ $scope.$on('RisksGet',function(){
     $scope.isloaded = false;
     //loading图标显示
     $ionicLoading.show({
-        content: '加载中',
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
@@ -8248,12 +8291,12 @@ $scope.$on('RisksGet',function(){
   GetHZID,Getexaminfo,Getdiaginfo,Getdruginfo,GetBasicInfo,PageFunc) {
   //   loading图标显示
   // $ionicLoading.show({
-  //   content: '加载中',
   //   animation: 'fade-in',
   //   showBackdrop: true,
   //   maxWidth: 200,
   //   showDelay: 0
     // });
+  $scope.PID=Storage.get("PatientID");
   $scope.basicclinicinfo={
     HJZYYID:""
   };
@@ -8266,7 +8309,7 @@ $scope.$on('RisksGet',function(){
       url:'http://10.12.43.56:57772/csp/hz_mb/Bs.WebService.cls?soap_method=GetPatient',
         // http://localhost:57772/csp/hz_mb/%25SOAP.WebServiceInvoke.cls?CLS=Bs.WebService&OP=GetBasicInfo
         params:{
-          'UserId':Storage.get("PatientID"),
+          'UserId':$scope.PID,
           'PatientId':$scope.basicclinicinfo.HJZYYID,
           'StartDateTime': $scope.tt,
           'HospitalCode':'HJZYY'
@@ -8539,9 +8582,70 @@ $scope.$on('RisksGet',function(){
   //   $scope.SMSCount=0;
   // })
 }])
-.controller('supportCtrl',['$scope','$state','$ionicHistory','Storage',function($scope,$state,$ionicHistory,Storage){
+.controller('newSupportCtrl',['$scope','$state','$ionicHistory','$ionicLoading','Storage','userINFO',function($scope,$state,$ionicHistory,$ionicLoading,Storage,userINFO){
+  $scope.patient = {
+    'UserName':Storage.get('PatientName'),
+    'GenderText':Storage.get('PatientGender').slice(0,1),
+    'Age':Storage.get('PatientAge'),
+    'PID':Storage.get('PatientID')
+  }
+  $scope.coachID=Storage.get('UID');
+  $scope.levels={'普通':1,'加急':2,'请马上处理':3};
+  $scope.doctors={'陆遥':'U201511170004','angle':'U201611170008'};
+  $scope.modules={};
+  userINFO.HModulesByID({'PatientId':$scope.patient.PID,'DoctorId':$scope.coachID})
+  .then(function(data){
+    $scope.modules=data;
+  })
+  $scope.consultation = {
+    "DoctorId": "",
+    "PatientId": $scope.patient.PID,
+    "SortNo": 0,
+    "ApplicationTime": "",
+    "HealthCoachId": $scope.coachID,
+    "Module": "",
+    "Title": "",
+    "Description": "",
+    "ConsultTime": "",
+    "Solution": "",
+    "Emergency": 1,
+    "Status": 1,
+    "Redundancy": "sample string 13",
+    "revUserId": "sample string 14",
+    "TerminalName": "sample string 15",
+    "TerminalIP": "sample string 16",
+    "DeviceType": 17
+  }
   $scope.historyBack = function(){
     $ionicHistory.goBack();
+  }
+  function info(msg){
+    $ionicLoading.show({
+      template: msg,
+      noBackdrop:true,
+      animation: 'fade-in',
+      duration:2000
+    })
+  }
+  $scope.submit = function(){
+    if(!$scope.consultation.Module) return info('请选择患者模块');
+    if(!$scope.consultation.DoctorId) return info('请选择医生');
+    if(!$scope.consultation.Title) return info('主题不能为空');
+    if(!$scope.consultation.Description) return info('正文不能为空');
+    var time=new Date();
+    var timestr=time.toISOString();
+    timestr= timestr.substr(0,10) +' '+ timestr.substr(11,8);
+    $scope.consultation.ApplicationTime=timestr;
+    $scope.consultation.ConsultTime=timestr;
+    userINFO.Consultation($scope.consultation)
+    .then(function(data){
+      if(data.result=='数据插入成功'){
+        info('提交成功');
+        setTimeout(function(){$ionicHistory.goBack(); }, 1500);
+      }
+    },function(err){
+      info('提交失败');
+    })
   }
 }])
 // 依从率图的控制器amcharts部分 ZXF 20151102
@@ -8565,7 +8669,6 @@ $scope.$on('RisksGet',function(){
   {
     // loading图标显示
     $ionicLoading.show({
-      content: '加载中',
       animation: 'fade-in',
       showBackdrop: true,
       maxWidth: 200,
@@ -8576,7 +8679,8 @@ $scope.$on('RisksGet',function(){
     $scope.Name=Storage.get('PatientName');
     $scope.age=Storage.get('PatientAge');
     $scope.gender=Storage.get('PatientGender');
-    var promise=GetBasicInfo.GetBasicInfoByPid(Storage.get('PatientID'));
+    $scope.PID=Storage.get('PatientID');
+    var promise=GetBasicInfo.GetBasicInfoByPid($scope.PID);
     promise.then(function(data){
       $scope.clinicinfo=data;
     }, function(data) {
@@ -8773,7 +8877,6 @@ $scope.$on('RisksGet',function(){
         }
        $ionicLoading.show
           ({
-            content: '加载中',
             animation: 'fade-in',
             showBackdrop: true,
             maxWidth: 200,
