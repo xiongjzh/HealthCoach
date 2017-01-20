@@ -28,7 +28,7 @@ angular.module('starter.filters', [])
 })
 .filter('datetext', function() {
   return function(date) {
-    if(date.length!=19) return date;
+    if(typeof date !== 'string' || date.length!=19) return date;
     var t=new Date();
     var yyyy=parseInt(date.substr(0,4));
     var mm=date.substr(5,2)-1;

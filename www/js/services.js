@@ -74,7 +74,8 @@
       BasicInfo:{method:'GET',params:{route:'@route'},timeout:10000},
       ChangePassword:{method:'POST',params:{route:'ChangePassword'},timeout: 10000},
       Consultation:{method:'POST',params:{route:'Consultation'},timeout: 10000},
-      doctorList:{method:'GET',params:{route:'doctorList'},timeout:10000},
+      getConsultation:{method:'GET',params:{route:'Consultation'},timeout: 10000,isArray:true},
+      doctorList:{method:'GET',params:{route:'doctorList'},timeout:10000,isArray:true},
       GetAppoitmentPatientList:{method:'GET',params:{route:'GetAppoitmentPatientList',$top:'@top',$skip:'@skip',$orderby:'@orderby',$filter:'@filter', healthCoachID:'@healthCoachID',Status:'@Status'},timeout:10000,isArray:true},
       GetCalendar:{method:'GET',isArray:true,params:{route:'Calendar',DoctorId:'@DoctorId'},timeout: 10000},
       GetCommentList: {method:'GET',isArray: true,params:{route: 'GetCommentList'}, timeout:100000},
@@ -431,6 +432,7 @@
 	return serve;
 }])
 .factory('userINFO',['$http','$q' , 'Storage','Data', function($http,$q,Storage,Data){
+    var doctors={};
     var serve={};
     serve.BasicInfo = function(_UserId){
         var urltemp=_UserId+'/BasicInfo';
@@ -479,11 +481,42 @@
         });
         return deferred.promise;
     }
-    serve.doctorList = function(obj){
+    serve.getConsultation = function(obj,getOne){
         var deferred = $q.defer();
-        Data.Users.doctorList(obj,
+        Data.Users.getConsultation(obj,
         function(data){
+          data.sort(function(a,b){
+            var keyA=a.ApplicationTime,keyB=b.ApplicationTime;
+            return ((keyA < keyB) ? 1 : ((keyA > keyB) ? -1 : 0));
+          });
+          console.log(data);
+          if(getOne) deferred.resolve(data[0]);
+          serve.doctorList()
+          .then(function(doctorlist){
+            for(var i=0;i<data.length;++i){
+              data[i].DoctorName=doctors[data[i].DoctorId] || '';
+            }
             deferred.resolve(data);
+          },function(err){
+            for(var i=0;i<data.length;++i){
+              data[i].DoctorName=doctors[data[i].DoctorId] || '';
+            }
+            deferred.resolve(data);
+          })
+          //deferred.resolve(data);
+        },
+        function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    }
+    serve.doctorList = function(){
+        var deferred = $q.defer();
+        Data.Users.doctorList({},
+        function(data){
+            doctors={};
+            for(var i=0;i<data.length;++i) doctors[data[i].DoctorId]=data[i].DoctorName;
+            deferred.resolve(doctors);
         },
         function(err){
             deferred.reject(err);

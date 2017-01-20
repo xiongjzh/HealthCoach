@@ -8,44 +8,44 @@
   <div class="bar-shadow"></div>
  	<ion-content scroll='true'>
 <div class="list">
-  <div class="item item-divider">{{patient.UserName}}<span style="padding-left:12%"></span>{{patient.GenderText}}<span style="padding-left:10px"></span>{{patient.Age}}</div>
+  <div class="item item-divider">{{consultation.PatientName}}<span style="padding-left:12%"></span>{{patient.GenderText}}<span style="padding-left:10px"></span>{{patient.Age}}</div>
 
   <a class="item">
-    <!-- <i class="icon ion-mic-a"></i> -->
     所选模块
     <span class="item-note">
       {{consultation.Module}}
     </span>
   </a>
   <a class="item">
-    <!-- <i class="icon ion-mic-a"></i> -->
     所选医生
     <span class="item-note">
       {{consultation.DoctorName}}
     </span>
   </a>
   <a class="item">
-    <!-- <i class="icon ion-mic-a"></i> -->
     紧急程度
     <span class="item-note">
       {{consultation.Emergency | emergency}}
     </span>
   </a>
-  <a class="item" style="background-color: #f5f5f5">
-  </a>
+  <a class="item" style="background-color: #f5f5f5"></a>
   <a class="item">
-    时间：consultation.ConsultTime
+    提问时间
+    <span class="item-note">
+      {{consultation.ApplicationTime.substr(0,10)+' '+consultation.ApplicationTime.substr(11,8)}}
+    </span>
   </a>
   <a class="item">
     主题：{{consultation.Title}}
   </a>
-  <a class="item">
+  <a class="item"  style="white-space: normal;">
     正文：{{consultation.Description}}
   </a>
+  <a class="item" style="background-color: #f5f5f5"></a>
   <a class="item">
     处理状态：{{consultation.Status | supportstatus}}
   </a>
-  <a class="item">
+  <a class="item" ng-if="consultation.Status==4" style="white-space: normal;">
     答复：{{consultation.Solution}}
   </a>
 

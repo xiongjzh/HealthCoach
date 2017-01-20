@@ -1812,13 +1812,12 @@
     })
   }
 }])
-.controller('CoachMessageCtrl',['$state','$scope','$filter','MessageInfo','Storage', function($state,$scope,$filter,MessageInfo,Storage){
+.controller('CoachMessageCtrl',['$state','$scope','$filter','MessageInfo','Storage','userINFO', function($state,$scope,$filter,MessageInfo,Storage,userINFO){
   $scope.$on('$ionicView.enter', function() {
-    $scope.consultation={
-      Title:'abdce',
-      Description:'nothing',
-      ApplicationTime:'2016 12/12 12:12:12'
-    }
+    userINFO.getConsultation({HealthCoachId:Storage.get('UID'),PatientId:'{PatientId}',strstatus:'{strstatus}'},true)
+    .then(function(data){
+      $scope.consultation=data;
+    });
     MessageInfo.GetDataByStatus(Storage.get('UID'),1,'{Status}',1,0)
     .then(function(data){
       $scope.systemMessage=data[0];
@@ -1875,9 +1874,6 @@
     // Storage.set('PatientGender',message.GenderText);
     // Storage.set("PatientPhotoAddress",message.photoAddress);
   }
-  // $scope.goToHome = function(){
-  //   $state.go('coach.home');
-  // }
 }])
 .controller('CoachMessageDetailCtrl',['$state','$scope','$stateParams','MessageInfo','Storage', function($state,$scope,$stateparams,MessageInfo,Storage){
   $scope.$on('$ionicView.enter', function() {
@@ -1894,38 +1890,45 @@
     }
   });
 }])
-.controller('CoachMessageSupportCtrl',['$state','$scope','$ionicModal','Storage',function($state,$scope,$ionicModal,Storage){
-  $scope.consultations=[
-    {"SortNo":2,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"4353","Emergency":1,"Status":1},
-    {"SortNo":1,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescriptionthisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"534","Emergency":1,"Status":1}
-  ]
+//通知内咨询记录
+.controller('CoachMessageSupportCtrl',['$state','$scope','$ionicModal','$ionicLoading','Storage','userINFO',function($state,$scope,$ionicModal,$ionicLoading,Storage,userINFO){
+  $scope.consultations=[];
+  $ionicLoading.show();
+  function loadData(){
+    userINFO.getConsultation({HealthCoachId:Storage.get('UID'),PatientId:'{PatientId}',strstatus:'{strstatus}'},false)
+    .then(function(data){
+      $scope.consultations=data;
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  }
+  $scope.doRefresh = loadData;
+  loadData();
   $ionicModal.fromTemplateUrl('partials/managepatient/support/detailModal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.modal = modal;
   });
-  $scope.moreOfThisPatient  = function(){
-    $scope.modal.hide()
-    // Storage.set("PatientID",$scope.consultation.PatientId);
-    // Storage.set("isManage","Yes");
-    // Storage.set("PatientName",$scope.consultation.PatientName);
-    // Storage.set('PatientAge',$scope.consultation.Age);
-    // Storage.set('PatientGender',$scope.consultation.GenderText);
-    // Storage.set("PatientPhotoAddress",$scope.consultation.photoAddress);
-    // $state.go('supportList')
-  }
   $scope.showDetail = function(consultation){
     $scope.modal.show();
     $scope.consultation=consultation;
   }
 }])
-.controller('supportListCtrl',['$state','$stateParams','$ionicHistory','$scope','$ionicModal','Storage',function($state,$stateParams,$ionicHistory,$scope,$ionicModal,Storage){
-  $scope.PID=$stateParams.PID;
-  $scope.consultations=[
-    {"SortNo":2,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"的方式公司的风格","Emergency":1,"Status":1},
-    {"SortNo":1,"ApplicationTime":"2017-01-09T15:08:35","patientId":"U201511120002","DoctorName":"童丹阳","Module":"高血压模块","Title":"thisIsTitle","Description":"thisIsDescription","ConsultTime":"2017-01-09T15:08:35","Solution":"给大家东方国际","Emergency":1,"Status":1}
-  ]
+//patient相关咨询记录
+.controller('supportListCtrl',['$state','$stateParams','$ionicHistory','$scope','$ionicModal','Storage','userINFO',function($state,$stateParams,$ionicHistory,$scope,$ionicModal,Storage,userINFO){
+  $scope.patient={};
+  $scope.patient.PID=$stateParams.PID;
+  userINFO.BasicInfo($scope.patient.PID)
+  .then(function(data){
+    $scope.patient.basic=data.toJSON();
+    //console.log(data);
+  })
+  $scope.consultations=[];
+  userINFO.getConsultation({HealthCoachId:Storage.get('UID'),PatientId:$scope.patient.PID,strstatus:'{strstatus}'},false)
+  .then(function(data){
+    $scope.consultations=data;
+  });
   $ionicModal.fromTemplateUrl('partials/managepatient/support/detailModal2.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -1941,7 +1944,7 @@
     $scope.consultation=consultation;
   }
   $scope.newSupport = function(){
-    $state.go('newsupport');
+    $state.go('newsupport',{'PID':$scope.patient.PID});
   }
 }])
 .controller('myPatientCtrl', ['$rootScope', '$ionicScrollDelegate', '$ionicPopover','$filter','$ionicModal', '$ionicPopup','$ionicLoading','$scope', '$state','$timeout','$interval','$ionicHistory','Storage' ,'userINFO','PageFunc','CONFIG','QRScan' ,function($rootScope,$ionicScrollDelegate,$ionicPopover,$filter,$ionicModal, $ionicPopup,$ionicLoading,$scope, $state,$timeout,$interval,$ionicHistory,Storage,userINFO,PageFunc,CONFIG,QRScan){
@@ -8578,21 +8581,24 @@ $scope.$on('RisksGet',function(){
     }
     getSMSCount(doc,PID);
   })
-  // $scope.$on('$ionicView.enter', function(){
-  //   $scope.SMSCount=0;
-  // })
 }])
-.controller('newSupportCtrl',['$scope','$state','$ionicHistory','$ionicLoading','Storage','userINFO',function($scope,$state,$ionicHistory,$ionicLoading,Storage,userINFO){
+.controller('newSupportCtrl',['$scope','$state','$stateParams','$ionicHistory','$ionicLoading','Storage','userINFO',function($scope,$state,$stateParams,$ionicHistory,$ionicLoading,Storage,userINFO){
   $scope.patient = {
-    'UserName':Storage.get('PatientName'),
-    'GenderText':Storage.get('PatientGender').slice(0,1),
-    'Age':Storage.get('PatientAge'),
-    'PID':Storage.get('PatientID')
-  }
+    'basicInfo':{},
+    'PID':$stateParams.PID
+  };
+  userINFO.BasicInfo($scope.patient.PID)
+  .then(function(data){
+    $scope.patient.basicInfo=data.toJSON();
+  });
   $scope.coachID=Storage.get('UID');
   $scope.levels={'普通':1,'加急':2,'请马上处理':3};
-  $scope.doctors={'陆遥':'U201511170004','angle':'U201611170008'};
+  $scope.doctors={};
   $scope.modules={};
+  userINFO.doctorList()
+  .then(function(doctors){
+    $scope.doctors=doctors;
+  })
   userINFO.HModulesByID({'PatientId':$scope.patient.PID,'DoctorId':$scope.coachID})
   .then(function(data){
     $scope.modules=data;
@@ -8610,10 +8616,10 @@ $scope.$on('RisksGet',function(){
     "Solution": "",
     "Emergency": 1,
     "Status": 1,
-    "Redundancy": "sample string 13",
-    "revUserId": "sample string 14",
-    "TerminalName": "sample string 15",
-    "TerminalIP": "sample string 16",
+    "Redundancy": "empty",
+    "revUserId": "empty",
+    "TerminalName": "empty",
+    "TerminalIP": "empty",
     "DeviceType": 17
   }
   $scope.historyBack = function(){

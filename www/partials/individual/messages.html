@@ -16,7 +16,7 @@
       </a>
       <a class="item item-icon-left" ng-show="consultation" style="height:64px;padding-top:10px;padding-bottom:10px;padding-left:66px" href="#/coach/messages/supports">
         <i class="icon ion-medkit" style="color:#FFF;width:44px;height:44px;background-color:#FDD835;margin-top:9px;padding-left:6px;border-radius:4px"></i>
-        <span class="item-note">{{consultation.ApplicationTime}}</span>
+        <span class="item-note">{{consultation.ApplicationTime | datetext}}</span>
         <p style="color:#000"><span style="color:#FF6D00">[咨询医生]</span>{{consultation.Title}}</p>
         <p style="width:90%">{{consultation.Description}}</p>
       </a>

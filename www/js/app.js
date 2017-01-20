@@ -304,6 +304,7 @@
   })
   .state('newsupport',{
     url:"/newsupport",
+    params:{'PID':''},
     // views:{
       // "plan-tab":{
         cache:false,
