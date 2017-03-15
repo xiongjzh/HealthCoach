@@ -1,25 +1,12 @@
 <ion-view cache-view="false" title="临床信息">
-<!-- <div class="bar-subheader bar-stable">
-	<div class="row" style="padding:0px">
-		<div class="col-75">
-			<h3>{{Name}}      {{gender}}        {{age}}岁</h3>
-		</div>
-		<div  class="col-25 text-right"> 
-			<button class="button icon-right" ng-click="backtocoach()">返回主页</button>
-		</div>	
-	</div>
-</div> -->
 <ion-nav-bar class="bar-positive">
     <ion-nav-buttons side="left">
       <button class="button icon button-icon ion-android-home" ng-click="backtocoach()"></button>
     </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button icon button-icon ion-help-circled" href="#/supportList/{{PID}}"></a>
+    </ion-nav-buttons>
 </ion-nav-bar>
-<!-- <ion-head-bar class="bar-positive">
-    
-      <button class="button icon button-icon ion-android-home" ng-click="backtocoach()"></button>
-    
-</ion-head-bar> -->
-
 <ion-content has-bouncing="false" class="content-item-list">
 
 

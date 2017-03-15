@@ -1,21 +1,3 @@
-<!-- <ion-view view-title="个人日程" hide-nav-bar="true">
-
-
-<ion-header-bar >
-  <button class="button button-icon icon ion-arrow-left-a" ng-click="onClickBackward()">返回</button>
-  <div class="h1 title">个人日程</div>
-</ion-header-bar>
-
-  <ion-content>
-
-
-
-
- </ion-content>
-
-  </ion-view> -->
-
-
 <ion-view view-title="Calendar" hide-nav-bar="true">
 
 <ion-header-bar class="bar bar-positive">
@@ -24,62 +6,11 @@
   <button class="button button-icon icon ion-android-refresh" ng-click="onClickRefresh()"></button>
 </ion-header-bar>
 
-<!-- <div class="bar bar-subheader 
-  item-input-inset bar-light">
-  <label class="item-input-wrapper">
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="search" ng-model="query" placeholder="Search">
-  </label>
-</div> -->
-
 <ion-content class=" padding" >
 
 <p>今日进度 {{today.todayHasFinished}} / {{today.todayToBeFinished}}</p>
 <div class ="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar" ng-if = "loadingDone" disableTap></div>
 
-<!-- <div  ng-repeat = " item in events"> -->
-    <!-- <div class="item item-divider item-divider-calm">  </div> -->
-    
-   
-
-<!--       <h2>{{item.title}}</h2>
-      <h2> {{item.start.getMonth() +1 }}-{{item.start.getDate()}} </h2> -->
-<!-- 
-      {{ item.Description }} -->
-
-<!-- </div> -->
-<!-- <div class="day" ng-repeat="(dayIndex, day) in calendar">
-  <div class="item item-divider item-divider-calm">
-    {{day.weekday}}
-  </div>
-  <div ng-show="day.title" class="item item-list item-text-wrap dayhighlight">
-    <h2>{{day.title}}</h2>
-    {{day.description}}
-  </div>
-
-  <ion-list>
-    <ion-item ng-class="{'item-avatar':item.shortname, 'star': item.star}"
-    class="item-text-wrap item-icon-right"
-    ng-repeat="item in day.schedule | filter: query"
-    href="#">
-
-      <img ng-show="item.shortname" ng-src="img/{{item.shortname}}_tn.jpg" alt="{{item.name}} Photo">
-      <h2>{{item.time}}</h2>
-      <h3>{{item.title}}</h3>
-      <h4>{{ item.artist ? ' with ' + item.artist : ''}}</h4>
-      <p>{{ item.description }}</p>
-
-      <button class="button button-clear icon ion-star button-assertive" ng-click="toggleStar(item)" ng-show="item.star"></button>
-      <ion-option-button class="button-calm" ng-click="toggleStar(item)"><i class="icon ion-star"></i></ion-option-button>
-      <ion-option-button class="button-assertive" ng-click="onItemDelete(dayIndex, item)"><i class="icon ion-trash-a"></i></ion-option-button>
-
-    </ion-item>
-  </ion-list>
-
-</div> -->
-<!--   <div class="button button-block button-primary" ng-click= "onClickTest()">
-    Test U Stupid Bitch
-  </div> -->
 </ion-content>
 </ion-view> 
 

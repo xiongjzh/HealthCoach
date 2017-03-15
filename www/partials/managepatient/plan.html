@@ -1,9 +1,13 @@
 <ion-view cache-view="false" title="计划情况">
 <ion-nav-bar class="bar-positive">
-<ion-nav-buttons side="left">
-<button class="button icon button-icon ion-android-home" ng-click="backtocoach()"></button>
-</ion-nav-buttons>
+    <ion-nav-buttons side="left">
+        <button class="button icon button-icon ion-android-home" ng-click="backtocoach()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button icon button-icon ion-help-circled" href="#/supportList/{{PID}}"></a>
+    </ion-nav-buttons>
 </ion-nav-bar>
+
 <ion-content has-bouncing="false"  class="content-item-list" scroll="true">
 <!-- <div style="padding:0 0 0 12px;background-color:#3d6399;margin:0;text-color:#FFFFFF"> 
   <h3 style="color:#FFFFFF;font-size:1.4em;padding-top:5px;margin:0;">{{Name}}  {{gender}}  {{age}}</h3>
